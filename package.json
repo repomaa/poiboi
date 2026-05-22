@@ -4,12 +4,21 @@
   "keywords": [
     "pebble-app"
   ],
-  "name": "hello-typescript.",
+  "name": "poiboi",
   "pebble": {
-    "displayName": "TS - Hello",
+    "displayName": "poiboi",
     "enableMultiJS": true,
     "messageKeys": [
-      "dummy"
+      "radius",
+      "ring_width",
+      "request_pois",
+      "poi_count",
+      "poi_index",
+      "poi_name",
+      "poi_lat",
+      "poi_lon",
+      "poi_dist",
+      "poi_type"
     ],
     "projectType": "moddable",
     "resources": {
@@ -18,7 +27,8 @@
     "sdkVersion": "3",
     "targetPlatforms": [
       "emery",
-      "gabbro"
+      "gabbro",
+      "diorite"
     ],
     "uuid": "d84c89d9-bb3a-4f5e-960b-af99d71266f0",
     "watchapp": {
