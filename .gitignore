@@ -1,2 +1,6 @@
 build/
 node_modules/
+moddable/
+# Local-only tsconfig for editor support. CloudPebble builds its own tsconfig from manifest.json.
+tsconfig.json
+.local-tsconfig.json

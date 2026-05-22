@@ -1,7 +1,5 @@
 import Button from "pebble/button";
 
-type ButtonType = "select" | "up" | "down";
-
 class PebbleApp {
   private buttonPresses: number = 0;
   private lastPress: string = "none";
@@ -10,8 +8,8 @@ class PebbleApp {
   constructor() {
     new Button({
       types: ["select", "up", "down"],
-      onPush: (down: number, type: ButtonType): void => {
-        if (down) {
+      onPush: (pushed, type) => {
+        if (pushed) {
           this.buttonPresses++;
           this.lastPress = type;
           console.log(`Button ${type} pressed (total: ${this.buttonPresses})`);

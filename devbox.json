@@ -1,13 +1,28 @@
 {
-  "$schema":  "https://raw.githubusercontent.com/jetify-com/devbox/0.17.2/.schema/devbox.schema.json",
-  "packages": ["pnpm@latest"],
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.17.2/.schema/devbox.schema.json",
+  "packages": [
+    "pnpm@latest",
+    "git",
+    "typescript"
+  ],
   "shell": {
     "init_hook": [
-      "echo 'Welcome to devbox!' > /dev/null"
+      "if [ -d \"moddable\" ]; then export MODDABLE=\"$PWD/moddable\"; fi"
     ],
     "scripts": {
       "test": [
         "echo \"Error: no test specified\" && exit 1"
+      ],
+      "setup-types": [
+        "if [ -d \"moddable\" ]; then echo 'Moddable SDK already exists at ./moddable'; exit 0; fi",
+        "git clone --depth 1 --filter=blob:none --sparse https://github.com/Moddable-OpenSource/moddable.git moddable",
+        "cd moddable && git sparse-checkout set xs/includes typings examples",
+        "echo 'Moddable types fetched. Run `devbox run setup-editor` to create tsconfig.json for local editor support.'"
+      ],
+      "setup-editor": [
+        "if [ ! -f \".local-tsconfig.json\" ]; then echo '.local-tsconfig.json not found. Run `devbox run setup-types` first.'; exit 1; fi",
+        "cp .local-tsconfig.json tsconfig.json",
+        "echo 'Created tsconfig.json for local editor support. It is gitignored so it will not affect CloudPebble builds.'"
       ]
     }
   }

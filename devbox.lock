@@ -1,6 +1,10 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "git": {
+      "resolved": "github:NixOS/nixpkgs/bc57abace07689cfd34203aa5fb4027514895987?narHash=sha256-iw3XDIG6xxk%2BAZTcawCLHf6i9i4tXRzLZEoV9xhRToQ%3D#git",
+      "source": "nixpkg"
+    },
     "github:NixOS/nixpkgs/nixpkgs-unstable": {
       "last_modified": "2026-05-05T02:04:20Z",
       "resolved": "github:NixOS/nixpkgs/bc57abace07689cfd34203aa5fb4027514895987?lastModified=1777946660&narHash=sha256-iw3XDIG6xxk%2BAZTcawCLHf6i9i4tXRzLZEoV9xhRToQ%3D"
@@ -52,6 +56,10 @@
           "store_path": "/nix/store/72p3i4ffgspg4cvc54jb7dy6na3ar3lm-pnpm-11.1.2"
         }
       }
+    },
+    "typescript": {
+      "resolved": "github:NixOS/nixpkgs/bc57abace07689cfd34203aa5fb4027514895987?narHash=sha256-iw3XDIG6xxk%2BAZTcawCLHf6i9i4tXRzLZEoV9xhRToQ%3D#typescript",
+      "source": "nixpkg"
     }
   }
 }

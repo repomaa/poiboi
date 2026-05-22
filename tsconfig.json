@@ -1,0 +1,33 @@
+// tsconfig.json for an Alloy (Moddable SDK) Pebble project.
+// TypeScript needs this file to resolve types like `pebble/button` and globals like `watch`.
+// The Moddable/Alloy build system (mcconfig) reads manifest.json and handles the actual build,
+// but the TypeScript language server (VS Code, etc.) requires this standalone config.
+//
+// If you cloned the Moddable SDK to a different location than ./moddable, update the
+// paths below to match your MODDABLE environment variable.
+
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "pebble/*": ["./moddable/typings/pebble/*"]
+    },
+    "types": [
+      "./moddable/xs/includes/xs",
+      "./moddable/typings/global",
+      "./moddable/typings/pebble/global",
+      "./moddable/typings/pebble/piu",
+      "./moddable/typings/pebble/poco",
+      "./moddable/typings/easing",
+      "./moddable/typings/piu/MC",
+      "./moddable/typings/piu/MC-types"
+    ]
+  },
+  "include": ["src/**/*"]
+}
