@@ -1,0 +1,29 @@
+{
+    "author": "Moddable",
+    "dependencies": {},
+    "keywords": [
+        "pebble-app"
+    ],
+    "name": "hello-typescript.",
+    "pebble": {
+        "displayName": "TS - Hello",
+        "enableMultiJS": true,
+        "messageKeys": [
+            "dummy"
+        ],
+        "projectType": "moddable",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "emery",
+            "gabbro"
+        ],
+        "uuid": "d84c89d9-bb3a-4f5e-960b-af99d71266f0",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.0.0"
+}
