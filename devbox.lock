@@ -1,0 +1,57 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2026-05-05T02:04:20Z",
+      "resolved": "github:NixOS/nixpkgs/bc57abace07689cfd34203aa5fb4027514895987?lastModified=1777946660&narHash=sha256-iw3XDIG6xxk%2BAZTcawCLHf6i9i4tXRzLZEoV9xhRToQ%3D"
+    },
+    "pnpm@latest": {
+      "last_modified": "2026-05-20T06:38:13Z",
+      "resolved": "github:NixOS/nixpkgs/d99b013d5d1931ad77fe3912ed218170dec5d9a4#pnpm",
+      "source": "devbox-search",
+      "version": "11.1.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8m6jlv18xxxzx9idfl2ik1jxpva6ik1x-pnpm-11.1.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/8m6jlv18xxxzx9idfl2ik1jxpva6ik1x-pnpm-11.1.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/1fjma961gy4j81md569pbrl8npaa88qd-pnpm-11.1.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/1fjma961gy4j81md569pbrl8npaa88qd-pnpm-11.1.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/9v8hnr67vl845m7h0r5qcy2msb4sa0kd-pnpm-11.1.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/9v8hnr67vl845m7h0r5qcy2msb4sa0kd-pnpm-11.1.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/72p3i4ffgspg4cvc54jb7dy6na3ar3lm-pnpm-11.1.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/72p3i4ffgspg4cvc54jb7dy6na3ar3lm-pnpm-11.1.2"
+        }
+      }
+    }
+  }
+}
