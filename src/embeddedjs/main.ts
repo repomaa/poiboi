@@ -106,6 +106,7 @@ class POIBoiApp {
 
   private sonarTimer: number | null = null;
   private vibeCooldown: number = 0;
+  private isWritable: boolean = false;
 
   // Orientation offset in degrees. Assumes the watch is held roughly flat
   // (face-up like a compass) so that the compass heading matches the forward
@@ -127,7 +128,14 @@ class POIBoiApp {
     }
 
     this.setState("loading");
-    this.requestPOIs();
+
+    watch.addEventListener("connected", () => {
+      console.log("[poiboi] Phone connection changed:", JSON.stringify(watch.connected));
+      if (watch.connected.app && this.state === "loading" && this.isWritable) {
+        this.requestPOIs();
+      }
+    });
+
     console.log("[poiboi] App constructor complete");
   }
 
@@ -287,6 +295,10 @@ class POIBoiApp {
             this.userLon.toFixed(4),
           );
           this.updatePOIDistances();
+          if (this.pois.length === 0 && this.isWritable && this.state === "loading") {
+            console.log("[poiboi] First GPS fix, re-requesting POIs with location");
+            this.requestPOIs();
+          }
         }
       },
       onError: (err: Error) => {
@@ -340,11 +352,19 @@ class POIBoiApp {
   }
 
   private initMessaging(): void {
+    const app = this;
     this.message = new Message({
       onReadable: () => {
         const data = this.message.read();
         if (!data) return;
         this.handleMessage(data);
+      },
+      onWritable: () => {
+        console.log("[poiboi] Message channel ready");
+        app.isWritable = true;
+        if (app.state === "loading") {
+          app.requestPOIs();
+        }
       },
       format: "map",
       keys: [
@@ -411,6 +431,11 @@ class POIBoiApp {
     if (!watch.connected.app) {
       console.log("[poiboi] Phone not connected, waiting...");
       this.statusLabel.string = "Waiting for phone...";
+      return;
+    }
+    if (!this.isWritable) {
+      console.log("[poiboi] Message channel not writable yet, deferring...");
+      this.statusLabel.string = "Loading POIs...";
       return;
     }
     const width = this.radius * this.RING_WIDTH_RATIO;
