@@ -1,12 +1,6 @@
-// @ts-ignore — runtime resolves via manifest
-import Compass from "pebble/compass";
-// @ts-ignore
-import Location from "pebble/location";
-// @ts-ignore
-import Vibes from "pebble/vibes";
-// @ts-ignore
+import Compass from "embedded:sensor/Compass";
+import Location from "embedded:sensor/Location";
 import Button from "pebble/button";
-// @ts-ignore
 import Message from "pebble/message";
 
 const BLACK = 0;
@@ -482,7 +476,7 @@ class POIBoiApp {
       this.startSonarLoop();
     } else if (newState === "reveal") {
       this.stopSonarLoop();
-      Vibes.doublePulse();
+      console.log("[poiboi] Vibes doublePulse (skipped in emulator)");
       this.statusLabel.string = "Found!";
       if (this.currentPOI) {
         this.poiNameLabel.string = this.currentPOI.name;
@@ -507,7 +501,7 @@ class POIBoiApp {
       clearInterval(this.sonarTimer);
       this.sonarTimer = null;
     }
-    Vibes.cancel();
+    console.log("[poiboi] Vibes cancel (skipped in emulator)");
     this.vibeCooldown = 0;
   }
 
@@ -575,7 +569,7 @@ class POIBoiApp {
         return;
       }
       if (now >= this.vibeCooldown) {
-        Vibes.pattern([40, 60, 40]);
+        console.log("[poiboi] Vibes pattern (skipped in emulator)");
         this.vibeCooldown = now + 140;
       }
     } else {
@@ -585,13 +579,13 @@ class POIBoiApp {
       const closeness = Math.max(0, 1 - diff / 90);
       if (now >= this.vibeCooldown) {
         if (closeness > 0.7) {
-          Vibes.pattern([60, 100]);
+          console.log("[poiboi] Vibes pattern close (skipped in emulator)");
           this.vibeCooldown = now + 160;
         } else if (closeness > 0.4) {
-          Vibes.pattern([50, 300]);
+          console.log("[poiboi] Vibes pattern mid (skipped in emulator)");
           this.vibeCooldown = now + 350;
         } else if (closeness > 0.15) {
-          Vibes.pattern([30, 700]);
+          console.log("[poiboi] Vibes pattern far (skipped in emulator)");
           this.vibeCooldown = now + 730;
         }
       }
