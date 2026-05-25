@@ -135,19 +135,19 @@ class POIBoiApp {
     const blackSkin = new Skin({ fill: "black" });
     const whiteText = new Style({
       color: "white",
-      font: "18px",
+      font: "18px Gothic",
       horizontal: "center",
       vertical: "middle",
     });
     const smallText = new Style({
       color: "white",
-      font: "14px",
+      font: "14px Gothic",
       horizontal: "center",
       vertical: "middle",
     });
     const bigText = new Style({
       color: "white",
-      font: "24px",
+      font: "bold 24px Gothic",
       horizontal: "center",
       vertical: "middle",
     });
