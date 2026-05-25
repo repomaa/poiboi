@@ -1,18 +1,13 @@
-/// <reference path="./vibes.d.ts" />
-
-import Compass from "embedded:sensor/Compass";
-import Location from "embedded:sensor/Location";
-// @ts-ignore — prebuild tsc may not resolve pebble module paths; runtime resolves via manifest
+// @ts-ignore — runtime resolves via manifest
+import Compass from "pebble/compass";
+// @ts-ignore
+import Location from "pebble/location";
+// @ts-ignore
 import Vibes from "pebble/vibes";
+// @ts-ignore
 import Button from "pebble/button";
+// @ts-ignore
 import Message from "pebble/message";
-import Poco, { PocoPrototype } from "commodetto/Poco";
-
-declare module "commodetto/Poco" {
-  interface PocoPrototype {
-    fillCircle(color: number, x: number, y: number, r: number): void;
-  }
-}
 
 const BLACK = 0;
 const WHITE = 0xffffff;
@@ -179,7 +174,7 @@ class POIBoiApp {
       right: 0,
       bottom: 60,
       Behavior: class extends Behavior {
-        onDraw(port: Port, poco: PocoPrototype) {
+        onDraw(port: Port, poco: any) {
           appRef.drawSonar(port, poco);
         }
       },
@@ -224,7 +219,7 @@ class POIBoiApp {
     });
   }
 
-  private drawSonar(port: Port, poco: PocoPrototype): void {
+  private drawSonar(port: Port, poco: any): void {
     const w = port.width;
     const h = port.height;
     const cx = w / 2;
@@ -292,7 +287,11 @@ class POIBoiApp {
           this.userLat = sample.latitude;
           this.userLon = sample.longitude;
           this.hasLocation = true;
-          console.log("[poiboi] Location updated:", this.userLat.toFixed(4), this.userLon.toFixed(4));
+          console.log(
+            "[poiboi] Location updated:",
+            this.userLat.toFixed(4),
+            this.userLon.toFixed(4),
+          );
           this.updatePOIDistances();
         }
       },
@@ -374,7 +373,11 @@ class POIBoiApp {
   private handleMessage(
     data: Map<string | number, number | string | ArrayBuffer>,
   ): void {
-    console.log("[poiboi] Received message:", Object.fromEntries(data as any));
+    var msgEntries: any = {};
+    data.forEach(function (v: any, k: any) {
+      msgEntries[k] = v;
+    });
+    console.log("[poiboi] Received message:", JSON.stringify(msgEntries));
     if (data.has("radius")) {
       const r = data.get("radius");
       if (typeof r === "number") {
@@ -426,7 +429,12 @@ class POIBoiApp {
       payload.set("user_lat", this.userLat);
       payload.set("user_lon", this.userLon);
     }
-    console.log("[poiboi] Requesting POIs — radius:", this.radius, "location:", this.hasLocation);
+    console.log(
+      "[poiboi] Requesting POIs — radius:",
+      this.radius,
+      "location:",
+      this.hasLocation,
+    );
     this.message.write(payload as Map<string, number | string | boolean>);
     this.statusLabel.string = "Loading POIs...";
   }
