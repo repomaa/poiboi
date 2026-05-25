@@ -128,14 +128,6 @@ class POIBoiApp {
     }
 
     this.setState("loading");
-
-    watch.addEventListener("connected", () => {
-      console.log("[poiboi] Phone connection changed:", JSON.stringify(watch.connected));
-      if (watch.connected.app && this.state === "loading" && this.isWritable) {
-        this.requestPOIs();
-      }
-    });
-
     console.log("[poiboi] App constructor complete");
   }
 
@@ -354,12 +346,12 @@ class POIBoiApp {
   private initMessaging(): void {
     const app = this;
     this.message = new Message({
-      onReadable: () => {
-        const data = this.message.read();
+      onReadable() {
+        const data = this.read();
         if (!data) return;
-        this.handleMessage(data);
+        app.handleMessage(data);
       },
-      onWritable: () => {
+      onWritable() {
         console.log("[poiboi] Message channel ready");
         app.isWritable = true;
         if (app.state === "loading") {
