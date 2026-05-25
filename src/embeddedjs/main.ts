@@ -2,6 +2,7 @@
 
 import Compass from "embedded:sensor/Compass";
 import Location from "embedded:sensor/Location";
+// @ts-ignore — prebuild tsc may not resolve pebble module paths; runtime resolves via manifest
 import Vibes from "pebble/vibes";
 import Button from "pebble/button";
 import Message from "pebble/message";
@@ -124,6 +125,7 @@ class POIBoiApp {
   private readonly ORIENTATION_OFFSET = 0;
 
   constructor() {
+    console.log("[poiboi] App constructor starting");
     this.buildUI();
     this.initSensors();
     this.initMessaging();
@@ -132,10 +134,12 @@ class POIBoiApp {
     const savedRadius = localStorage.getItem("searchRadius");
     if (savedRadius) {
       this.radius = parseInt(savedRadius, 10);
+      console.log("[poiboi] Restored radius from localStorage:", this.radius);
     }
 
     this.setState("loading");
     this.requestPOIs();
+    console.log("[poiboi] App constructor complete");
   }
 
   private buildUI(): void {
@@ -266,6 +270,7 @@ class POIBoiApp {
   }
 
   private initSensors(): void {
+    console.log("[poiboi] Initializing sensors...");
     this.compass = new Compass({
       onSample: () => {
         const sample = this.compass.sample();
@@ -287,11 +292,12 @@ class POIBoiApp {
           this.userLat = sample.latitude;
           this.userLon = sample.longitude;
           this.hasLocation = true;
+          console.log("[poiboi] Location updated:", this.userLat.toFixed(4), this.userLon.toFixed(4));
           this.updatePOIDistances();
         }
       },
       onError: (err: Error) => {
-        console.log("Location error:", err);
+        console.log("[poiboi] Location error:", err);
       },
     });
     this.location.configure({
@@ -359,6 +365,8 @@ class POIBoiApp {
         "poi_lon",
         "poi_dist",
         "poi_type",
+        "user_lat",
+        "user_lon",
       ],
     });
   }
@@ -366,11 +374,13 @@ class POIBoiApp {
   private handleMessage(
     data: Map<string | number, number | string | ArrayBuffer>,
   ): void {
+    console.log("[poiboi] Received message:", Object.fromEntries(data as any));
     if (data.has("radius")) {
       const r = data.get("radius");
       if (typeof r === "number") {
         this.radius = r;
         localStorage.setItem("searchRadius", String(r));
+        console.log("[poiboi] Updated radius from phone:", r);
       }
     }
 
@@ -383,6 +393,7 @@ class POIBoiApp {
         type: String(data.get("poi_type") || ""),
       };
       this.pois.push(poi);
+      console.log("[poiboi] Received POI:", poi.name, "@", poi.dist, "m");
       if (this.hasLocation) {
         poi.dist = haversineMeters(
           this.userLat,
@@ -401,6 +412,7 @@ class POIBoiApp {
 
   private requestPOIs(): void {
     if (!watch.connected.app) {
+      console.log("[poiboi] Phone not connected, waiting...");
       this.statusLabel.string = "Waiting for phone...";
       return;
     }
@@ -410,8 +422,13 @@ class POIBoiApp {
       ["radius", this.radius],
       ["ring_width", Math.round(width)],
     ]);
+    if (this.hasLocation) {
+      payload.set("user_lat", this.userLat);
+      payload.set("user_lon", this.userLon);
+    }
+    console.log("[poiboi] Requesting POIs — radius:", this.radius, "location:", this.hasLocation);
     this.message.write(payload as Map<string, number | string | boolean>);
-    this.statusLabel.string = "Fetching POIs...";
+    this.statusLabel.string = "Loading POIs...";
   }
 
   private initButtons(): void {
@@ -437,10 +454,11 @@ class POIBoiApp {
 
   private setState(newState: AppState): void {
     if (this.state === newState) return;
+    console.log("[poiboi] State transition:", this.state, "->", newState);
     this.state = newState;
 
     if (newState === "loading") {
-      this.statusLabel.string = "poiboi";
+      this.statusLabel.string = "Loading POIs...";
       this.poiNameLabel.string = "";
       this.poiInfoLabel.string = "";
       this.hintLabel.string = "";
@@ -497,13 +515,17 @@ class POIBoiApp {
   }
 
   private updateStatusLine(): void {
+    if (this.state === "loading") {
+      this.statusLabel.string = "Loading POIs...";
+      return;
+    }
     if (this.state !== "sonar") return;
     if (this.currentPOI) {
       this.statusLabel.string = `${this.currentPOI.dist}m`;
     } else if (this.pois.length > 0) {
       this.statusLabel.string = "No POIs in range";
     } else {
-      this.statusLabel.string = "Scanning...";
+      this.statusLabel.string = "Scanning... (extend your arm)";
     }
   }
 
@@ -513,7 +535,7 @@ class POIBoiApp {
     if (!this.hasCompass || !this.currentPOI || !this.hasLocation) {
       if (this.state === "sonar") {
         this.statusLabel.string = this.hasLocation
-          ? "Scanning..."
+          ? "Scanning... (extend your arm)"
           : "Waiting for GPS...";
       }
       return;
@@ -536,9 +558,11 @@ class POIBoiApp {
       if (!this.isPointingAtPOI) {
         this.isPointingAtPOI = true;
         this.pointingStartTime = now;
+        console.log("[poiboi] Pointing at POI:", this.currentPOI.name);
       }
       const held = now - this.pointingStartTime;
       if (held >= this.POINTING_THRESHOLD_MS) {
+        console.log("[poiboi] Reveal triggered for:", this.currentPOI.name);
         this.setState("reveal");
         return;
       }

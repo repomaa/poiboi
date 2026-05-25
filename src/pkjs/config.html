@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>poiboi settings</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      text-align: center;
+      background: #000;
+      color: #fff;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    select {
+      font-size: 18px;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>poiboi settings</h2>
+  <label>Search radius</label>
+  <select id="radius">
+    <option value="100">100 m</option>
+    <option value="250">250 m</option>
+    <option value="500" selected>500 m</option>
+    <option value="1000">1 km</option>
+    <option value="2000">2 km</option>
+  </select>
+  <br><br>
+  <button id="save">Save</button>
+  <script>
+    document.getElementById("save").onclick = function() {
+      var r = document.getElementById("radius").value;
+      location.href = "pebblejs://close#" + encodeURIComponent(JSON.stringify({ radius: r }));
+    };
+  </script>
+</body>
+</html>

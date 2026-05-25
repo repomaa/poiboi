@@ -18,7 +18,9 @@
       "poi_lat",
       "poi_lon",
       "poi_dist",
-      "poi_type"
+      "poi_type",
+      "user_lat",
+      "user_lon"
     ],
     "projectType": "moddable",
     "resources": {
@@ -31,6 +33,9 @@
       "diorite"
     ],
     "uuid": "d84c89d9-bb3a-4f5e-960b-af99d71266f0",
+    "settings": {
+      "configurable": true
+    },
     "watchapp": {
       "watchface": false
     }
